@@ -69,4 +69,48 @@ class BaseDatos {
         }
         return cats;
     }
+    
+    // Consulta todos los productos de una chaza (disponibles y agotados)
+    static List<Producto> queryTodosLosProductos(int chazaId) {
+        List<Producto> list = new ArrayList<>();
+        try {
+            Connection c = connect();
+            PreparedStatement pstmt = c.prepareStatement(
+                "SELECT id, nombre, descripcion, precio, disponible FROM productos WHERE chaza_id = ? ORDER BY id"
+            );
+            pstmt.setInt(1, chazaId);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                list.add(new Producto(
+                    rs.getInt("id"),
+                    rs.getString("nombre"),
+                    rs.getString("descripcion"),
+                    rs.getDouble("precio"),
+                    rs.getInt("disponible") == 1
+                ));
+            }
+            c.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    // Actualiza el estado de disponibilidad en la base de datos (1 = Disponible, 0 = Agotado)
+    static boolean actualizarDisponibilidad(int productoId, boolean disponible) {
+        try {
+            Connection c = connect();
+            PreparedStatement pstmt = c.prepareStatement(
+                "UPDATE productos SET disponible = ? WHERE id = ?"
+            );
+            pstmt.setInt(1, disponible ? 1 : 0);
+            pstmt.setInt(2, productoId);
+            int filasAfectadas = pstmt.executeUpdate();
+            c.close();
+            return filasAfectadas > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
