@@ -1,0 +1,18 @@
+# Compilados Java — se generan con run.bat, no se suben al repo
+bin/
+
+# Base de datos local — cada quien la genera con: python database/init_db.py
+database/chazapp.db
+
+# Archivos de Python compilados
+__pycache__/
+*.pyc
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db

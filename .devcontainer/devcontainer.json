@@ -1,0 +1,31 @@
+{
+  "name": "ChazApp — UNAL",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+
+  "features": {
+    "ghcr.io/devcontainers/features/java:1": {
+      "version": "21",
+      "jdkDistro": "ms"
+    },
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.11"
+    },
+    "ghcr.io/devcontainers/features/desktop-lite:1": {
+      "password": "chazapp",
+      "webPort": "6080"
+    }
+  },
+
+  "portsAttributes": {
+    "6080": {
+      "label": "Escritorio (ChazApp UI)",
+      "onAutoForward": "openBrowser"
+    }
+  },
+
+  "postCreateCommand": "pip3 install --quiet sqlite3 2>/dev/null || true && python3 database/init_db.py && chmod +x run.sh",
+
+  "remoteEnv": {
+    "DISPLAY": ":1"
+  }
+}
