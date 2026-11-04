@@ -24,7 +24,6 @@ class PantallaVendedor {
 
         JPanel main = UIHelper.darkPanel(new BorderLayout());
 
-        // Top bar
         JPanel header = UIHelper.topBar("MODO VENDEDOR");
         main.add(header, BorderLayout.NORTH);
 
@@ -114,7 +113,7 @@ class PantallaVendedor {
         info.add(UIHelper.label(UIHelper.formatPrecio(prod.precio), 13, Font.BOLD, ChazApp.ACCENT));
         card.add(info, BorderLayout.CENTER);
 
-        // Botón de toggle (Disponible / Agotado)
+        // Botón de disponible o agotado
         JPanel right = new JPanel(new GridLayout(2, 1, 0, 6));
         right.setBackground(ChazApp.SURFACE);
 
