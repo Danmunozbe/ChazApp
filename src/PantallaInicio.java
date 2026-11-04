@@ -68,10 +68,9 @@ class PantallaInicio {
                         PantallaChazas.llenar(panelChazas);
                     }
                     ChazApp.cards.show(ChazApp.root, "chazas");
-                } else {
-                    JOptionPane.showMessageDialog(ChazApp.ventana,
-                        "Modo Vendedor pr\u00f3ximamente.", "ChazApp",
-                        JOptionPane.INFORMATION_MESSAGE);
+                } else if (combo.getSelectedIndex() == 2) {
+                     // Conexión con el modo vendedor
+                     PantallaVendedor.abrir();
                 }
             }
         });
