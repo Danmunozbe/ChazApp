@@ -1,112 +1,152 @@
 # ChazApp 🌯
-**Aplicación de escritorio para pedir en las chazas de la Universidad Nacional de Colombia.**
 
-Proyecto del curso Ingeniería de Software I — UNAL.
+**Plataforma para gestionar pedidos de comida en las chazas de la Universidad Nacional de Colombia.**
 
----
+Proyecto desarrollado para el curso **Ingeniería de Software I — Universidad Nacional de Colombia (UNAL)**.
 
-## ¿Qué hace?
-
-ChazApp permite a los estudiantes:
-- Consultar las chazas disponibles en el campus
-- Ver el menú de cada chaza organizado por categorías
-- Verificar disponibilidad de productos
-- Armar un pedido con carrito de compras
+ChazApp busca facilitar la consulta de menús y la gestión de pedidos en las chazas universitarias, permitiendo a los estudiantes realizar pedidos y a los vendedores administrarlos.
 
 ---
 
-## Estructura del proyecto
+## 📌 Estado del proyecto
 
-```
+Actualmente, el repositorio contiene dos versiones:
+
+- **Aplicación web (en desarrollo):** nueva versión construida con Spring Boot, Java y Thymeleaf.
+- **Prototipo de escritorio:** versión anterior desarrollada en Java Swing, conservada en `oldFiles/` como referencia del desarrollo inicial.
+
+---
+
+## 🚀 Funcionalidades
+
+La aplicación está planteada para permitir:
+
+- Consultar las chazas disponibles en el campus.
+- Visualizar los menús y productos disponibles.
+- Consultar la disponibilidad y los precios de los productos.
+- Realizar pedidos con cantidades específicas.
+- Generar un PIN para identificar y reclamar los pedidos.
+- Gestionar los pedidos desde el perfil del vendedor.
+- Actualizar el estado de los pedidos.
+
+*Estas funcionalidades se irán implementando progresivamente en la nueva aplicación web.*
+
+---
+
+## 📁 Estructura del proyecto
+
+```text
 ChazApp/
-├── src/              → Código fuente Java
-├── database/         → Base de datos SQLite + scripts de inicialización
-├── img/              → Imágenes y banners de las chazas
-├── sqlite-jdbc.jar   → Driver JDBC para SQLite (incluido)
-├── run.bat           → Ejecutar en Windows
-└── run.sh            → Ejecutar en Linux / macOS / Codespace
+├── .devcontainer/          # Configuración de GitHub Codespaces
+│
+├── oldFiles/               # Prototipo anterior de escritorio
+│
+├── Spring/                 # Nueva aplicación web
+│   ├── src/
+│   │   ├── main/
+│   │   │   ├── java/        # Código fuente Java
+│   │   │   └── resources/
+│   │   │       ├── static/  # CSS, JavaScript e imágenes
+│   │   │       └── templates/ # Plantillas HTML con Thymeleaf
+│   │   └── test/            # Pruebas automatizadas
+│   ├── pom.xml              # Dependencias y configuración Maven
+│   ├── mvnw                 # Maven Wrapper para Linux / macOS
+│   └── mvnw.cmd             # Maven Wrapper para Windows
+│
+├── .gitignore
+└── README.md
 ```
 
 ---
 
-## Requisitos
+## 🛠️ Tecnologías
 
-| Herramienta | Versión mínima |
-|-------------|---------------|
-| Java JDK    | 11 o superior |
-| Python      | 3.8 o superior |
+### Aplicación web (Spring Boot)
 
-> **En GitHub Codespaces** no necesitas instalar nada — el entorno se configura automáticamente al abrir el repositorio.
+| Tecnología | Uso |
+|---|---|
+| Java 21 | Lenguaje de programación |
+| Spring Boot | Framework principal |
+| Maven | Gestión de dependencias y construcción |
+| Spring MVC | Manejo de solicitudes web |
+| Thymeleaf | Renderizado de vistas HTML |
+| Spring Data JPA | Persistencia y acceso a datos |
+| Hibernate | Mapeo objeto-relacional |
+| H2 | Base de datos durante el desarrollo |
+
+
+
+## 💻 Requisitos
+
+Para ejecutar la aplicación web:
+
+- Java JDK 21 o superior.
+- Git (para clonar el repositorio).
 
 ---
 
-## Cómo ejecutar
+## ▶️ Cómo ejecutar la aplicación web
 
-### En GitHub Codespace ☁️ *(presentación del profesor)*
+La versión actual en desarrollo se encuentra dentro de la carpeta `Spring/`.
 
-1. Abrir el repositorio en Codespaces (botón verde **Code → Codespaces → Create**)
-2. Esperar a que el contenedor termine de configurarse (~1 min)
-3. Cuando el escritorio virtual aparezca en el navegador (puerto 6080), abrir una terminal dentro de él y ejecutar:
+### Windows 🪟
 
-```bash
-./run.sh
+```powershell
+# 1. Clonar el repositorio
+git clone https://github.com/Danmunozbe/ChazApp.git
+
+# 2. Entrar al proyecto Spring
+cd ChazApp\Spring
+
+# 3. Ejecutar la aplicación
+.\mvnw.cmd spring-boot:run
 ```
 
-4. La ventana de ChazApp aparecerá en el escritorio virtual del navegador.
-
-> La contraseña del escritorio virtual es: `chazapp`
-
----
-
-### En Linux / macOS 🐧🍎
+### Linux / macOS 🐧🍎
 
 ```bash
 # 1. Clonar el repositorio
 git clone https://github.com/Danmunozbe/ChazApp.git
-cd ChazApp
 
-# 2. Inicializar la base de datos (solo la primera vez)
-python3 database/init_db.py
+# 2. Entrar al proyecto Spring
+cd ChazApp/Spring
 
-# 3. Dar permisos y ejecutar
-chmod +x run.sh
-./run.sh
+# 3. Dar permisos de ejecución al Maven Wrapper
+chmod +x mvnw
+
+# 4. Ejecutar la aplicación
+./mvnw spring-boot:run
 ```
+
+Una vez iniciada, acceder desde el navegador a:
+
+**http://localhost:8080/**
+
+> La aplicación web se encuentra en desarrollo. Algunas rutas y funcionalidades todavía están pendientes de implementación.
+
+### Consola de base de datos H2
+
+Durante el desarrollo se utiliza H2 como base de datos.
+
+La consola está disponible en:
+
+**http://localhost:8080/h2-console**
+
+Los datos de conexión se encuentran en `Spring/src/main/resources/application.properties` y, si se utiliza una base de datos en memoria, los datos se reinician al detener la aplicación.
 
 ---
 
-### En Windows 🪟
 
-```bat
-:: 1. Clonar el repositorio
-git clone https://github.com/Danmunozbe/ChazApp.git
-cd ChazApp
 
-:: 2. Inicializar la base de datos (solo la primera vez)
-python database\init_db.py
+## Equipo de desarrollo
 
-:: 3. Ejecutar
-run.bat
-```
-
----
-
-## Base de datos
-
-La base de datos se genera localmente y **no se sube al repositorio** (ver `.gitignore`).
-
-Para reinicializarla desde cero:
-```bash
-python3 database/init_db.py --reset
-```
-
----
-
-## Equipo
-
-| Usuario | Rol |
-|---------|-----|
+| Usuario | Responsabilidad |
+|---|---|
 | Danmunozbe | Backend / Base de datos |
 | santiagomoralesmanrique | Frontend |
 | diego251307 | Frontend |
 | LeonardoDelgado1905 | Base de datos |
+
+---
+
+**Ingeniería de Software I — Universidad Nacional de Colombia**
