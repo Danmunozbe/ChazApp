@@ -42,6 +42,8 @@ ChazApp/
 ├── oldFiles/               # Prototipo anterior de escritorio
 │
 ├── Spring/                 # Nueva aplicación web
+│   ├── data/
+│   │   ├── chazapp.mv.db   # Base de datos H2
 │   ├── src/
 │   │   ├── main/
 │   │   │   ├── java/        # Código fuente Java
@@ -132,7 +134,7 @@ La consola está disponible en:
 
 **http://localhost:8080/h2-console**
 
-Los datos de conexión se encuentran en `Spring/src/main/resources/application.properties` y, si se utiliza una base de datos en memoria, los datos se reinician al detener la aplicación.
+Los datos de conexión se encuentran en `Spring/src/main/resources/application.properties` y, los datos en `Spring/data`.
 
 ---
 
