@@ -8,52 +8,60 @@ ChazApp busca facilitar la consulta de menús y la gestión de pedidos en las ch
 
 ---
 
-## 📌 Estado del proyecto
+## 📌 Estado del proyecto — Primer Incremento Funcional
 
-Actualmente, el repositorio contiene dos versiones:
+Se ha completado la implementación del **Primer Incremento Funcional** enfocado en los casos de uso esenciales:
 
-- **Aplicación web (en desarrollo):** nueva versión construida con Spring Boot, Java y Thymeleaf.
-- **Prototipo de escritorio:** versión anterior desarrollada en Java Swing, conservada en `oldFiles/` como referencia del desarrollo inicial.
+- **CU-05 — Consultar menú y disponibilidad por chaza (Rol Estudiante):**
+  - Exploración de las chazas disponibles en el campus universitario con información de ubicación y banners institucionales.
+  - Consulta del menú detallado de cada chaza con precios, imágenes y badges claros de estado en tiempo real (**Disponible** o **Agotado**).
+  - Manejo de excepción cuando una chaza no tiene su menú publicado (`menu_publicado = false`), mostrando un mensaje explicativo al estudiante: *"No hay un menú disponible para esta chaza"*.
+- **CU-04 — Actualizar disponibilidad de productos (Rol Vendedor):**
+  - Panel de administración exclusivo por puesto de chaza (`/vendedor/chaza/{chazaId}`).
+  - Botón de alternancia rápida (*toggle*) de disponibilidad por producto (`POST /vendedor/producto/{productoId}/toggle`) que actualiza la base de datos y se refleja inmediatamente en la vista del estudiante.
 
 ---
 
-## 🚀 Funcionalidades
+## 🚀 Rutas y Vistas de la Aplicación
 
-La aplicación está planteada para permitir:
-
-- Consultar las chazas disponibles en el campus.
-- Visualizar los menús y productos disponibles.
-- Consultar la disponibilidad y los precios de los productos.
-- Realizar pedidos con cantidades específicas.
-- Generar un PIN para identificar y reclamar los pedidos.
-- Gestionar los pedidos desde el perfil del vendedor.
-- Actualizar el estado de los pedidos.
-
-*Estas funcionalidades se irán implementando progresivamente en la nueva aplicación web.*
+| Ruta | Rol | Descripción |
+|---|---|---|
+| `/` | Público | Pantalla de bienvenida con selector rápido de rol (Estudiante o Vendedor por chaza) |
+| `/estudiante/chazas` | Estudiante | Catálogo de puestos de chazas activas en la UNAL |
+| `/estudiante/chazas/{id}` | Estudiante | Menú del día y disponibilidad de productos de la chaza |
+| `/vendedor/chaza/{chazaId}` | Vendedor | Panel de gestión y control de stock de la chaza seleccionada |
+| `POST /vendedor/producto/{id}/toggle` | Vendedor | Endpoint para alternar disponibilidad (Disponible ↔ Agotado) |
+| `/h2-console` | Desarrollador | Consola web interactiva de la base de datos H2 |
 
 ---
 
 ## 📁 Estructura del proyecto
 
+Arquitectura monolítica por capas dentro de `Spring/src/main/java/com/ChazApp/ChazApp/`:
+
 ```text
 ChazApp/
-├── .devcontainer/          # Configuración de GitHub Codespaces
+├── oldFiles/                       # Prototipo anterior de escritorio (Java Swing)
 │
-├── oldFiles/               # Prototipo anterior de escritorio
-│
-├── Spring/                 # Nueva aplicación web
-│   ├── data/
-│   │   ├── chazapp.mv.db   # Base de datos H2
+├── Spring/                         # Aplicación web Spring Boot
+│   ├── data/                       # Archivo local de base de datos H2 (ignorado en git)
 │   ├── src/
 │   │   ├── main/
-│   │   │   ├── java/        # Código fuente Java
+│   │   │   ├── java/com/ChazApp/ChazApp/
+│   │   │   │   ├── controller/     # HomeController, EstudianteController, VendedorController
+│   │   │   │   ├── exception/      # ChazaNotFoundException, ProductoNotFoundException, etc.
+│   │   │   │   ├── model/          # Entidades JPA (Chaza, Producto)
+│   │   │   │   ├── repository/     # Interfaces JpaRepository (ChazaRepository, ProductoRepository)
+│   │   │   │   └── service/        # Lógica de negocio (ChazaService, ProductoService)
 │   │   │   └── resources/
-│   │   │       ├── static/  # CSS, JavaScript e imágenes
-│   │   │       └── templates/ # Plantillas HTML con Thymeleaf
-│   │   └── test/            # Pruebas automatizadas
-│   ├── pom.xml              # Dependencias y configuración Maven
-│   ├── mvnw                 # Maven Wrapper para Linux / macOS
-│   └── mvnw.cmd             # Maven Wrapper para Windows
+│   │   │       ├── schema.sql      # Esquema DDL versionado para H2
+│   │   │       ├── data.sql        # Datos iniciales (Seed de 3 chazas y 17 productos)
+│   │   │       ├── static/img/     # Logos, banners y fotografías de productos
+│   │   │       └── templates/      # Vistas renderizadas con Thymeleaf y Bootstrap 5
+│   │   └── test/                   # Pruebas unitarias JUnit 5 y Mockito (cobertura 100%)
+│   ├── pom.xml                     # Dependencias y configuración Maven
+│   ├── mvnw                        # Maven Wrapper para Linux / macOS
+│   └── mvnw.cmd                    # Maven Wrapper para Windows
 │
 ├── .gitignore
 └── README.md
@@ -63,86 +71,94 @@ ChazApp/
 
 ## 🛠️ Tecnologías
 
-### Aplicación web (Spring Boot)
-
 | Tecnología | Uso |
 |---|---|
 | Java 21 | Lenguaje de programación |
-| Spring Boot | Framework principal |
-| Maven | Gestión de dependencias y construcción |
-| Spring MVC | Manejo de solicitudes web |
-| Thymeleaf | Renderizado de vistas HTML |
-| Spring Data JPA | Persistencia y acceso a datos |
-| Hibernate | Mapeo objeto-relacional |
-| H2 | Base de datos durante el desarrollo |
+| Spring Boot | Framework principal (Spring MVC, Spring Data JPA) |
+| Maven Wrapper (`./mvnw`) | Gestión de construcción y dependencias sin instalación previa |
+| Thymeleaf | Renderizado de vistas HTML en el servidor |
+| Bootstrap 5 + Bootstrap Icons | Diseño responsivo e identidad visual institucional |
+| H2 Database | Base de datos relacional local en archivo persistente |
+| JUnit 5 & Mockito | Suite de pruebas unitarias para la lógica de negocio |
+| JaCoCo | Medición de cobertura de código automatizada (100% en servicios) |
 
-
+---
 
 ## 💻 Requisitos
 
-Para ejecutar la aplicación web:
-
-- Java JDK 21 o superior.
-- Git (para clonar el repositorio).
+- **Java JDK 21** o superior.
+- Git.
 
 ---
 
-## ▶️ Cómo ejecutar la aplicación web
+## ▶️ Cómo ejecutar la aplicación y correr las pruebas
 
-La versión actual en desarrollo se encuentra dentro de la carpeta `Spring/`.
-
-### Windows 🪟
-
-```powershell
-# 1. Clonar el repositorio
-git clone https://github.com/Danmunozbe/ChazApp.git
-
-# 2. Entrar al proyecto Spring
-cd ChazApp\Spring
-
-# 3. Ejecutar la aplicación
-.\mvnw.cmd spring-boot:run
-```
-
-### Linux / macOS 🐧🍎
+Todas las instrucciones se ejecutan desde la carpeta `Spring/`:
 
 ```bash
-# 1. Clonar el repositorio
-git clone https://github.com/Danmunozbe/ChazApp.git
+cd Spring
+```
 
-# 2. Entrar al proyecto Spring
-cd ChazApp/Spring
+### 1. Ejecutar la aplicación web
 
-# 3. Dar permisos de ejecución al Maven Wrapper
+#### En Linux / macOS 🐧🍎:
+```bash
+# Dar permisos de ejecución al wrapper (solo la primera vez)
 chmod +x mvnw
 
-# 4. Ejecutar la aplicación
+# Iniciar la aplicación
 ./mvnw spring-boot:run
 ```
 
-Una vez iniciada, acceder desde el navegador a:
+#### En Windows 🪟:
+```powershell
+.\mvnw.cmd spring-boot:run
+```
 
-**http://localhost:8080/**
+Una vez iniciada, abre tu navegador en:
+👉 **http://localhost:8080/**
 
-> La aplicación web se encuentra en desarrollo. Algunas rutas y funcionalidades todavía están pendientes de implementación.
+### 2. Ejecutar las pruebas unitarias y verificar cobertura
 
-### Consola de base de datos H2
+#### En Linux / macOS 🐧🍎:
+```bash
+./mvnw test
+```
 
-Durante el desarrollo se utiliza H2 como base de datos.
+#### En Windows 🪟:
+```powershell
+.\mvnw.cmd test
+```
 
+Los reportes de cobertura generados por JaCoCo quedan disponibles en:
+`Spring/target/site/jacoco/index.html`
+
+### 3. Consola de base de datos H2
+
+Durante el desarrollo se utiliza H2 como base de datos en archivo local (`jdbc:h2:file:./data/chazappdb`).
 La consola está disponible en:
 
-**http://localhost:8080/h2-console**
+👉 **http://localhost:8080/h2-console**
 
-Los datos de conexión se encuentran en `Spring/src/main/resources/application.properties` y, los datos en `Spring/data`.
+- **JDBC URL:** `jdbc:h2:file:./data/chazappdb`
+- **User Name:** `sa`
+- **Password:** *(dejar vacío)*
 
 ---
 
+## 🤖 Declaración de uso de Inteligencia Artificial
 
+En cumplimiento de las buenas prácticas académicas y de transparencia, se declara que se utilizó la herramienta **Antigravity (Gemini)** como asistente de desarrollo para:
+1. Diseñar y estructurar la arquitectura monolítica por capas en Spring Boot (`model`, `repository`, `service`, `controller`).
+2. Adaptar el esquema relacional DDL (`schema.sql`) y datos iniciales de prueba (`data.sql`) para H2 Database.
+3. Generar las plantillas Thymeleaf con maquetación en Bootstrap 5 e identidad visual de la Universidad Nacional de Colombia.
+4. Redactar la suite de pruebas unitarias con JUnit 5 y Mockito para la capa de servicios, alcanzando el 100% de cobertura en la lógica de negocio de los casos de uso CU-04 y CU-05.
 
-## Equipo de desarrollo
+---
 
-| Usuario | Responsabilidad |
+## 👥 Equipo de desarrollo
+
+| Integrante | Rol / Responsabilidad |
 |---|---|
 | Danmunozbe | Backend / Base de datos |
 | santiagomoralesmanrique | Frontend |

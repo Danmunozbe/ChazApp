@@ -3,6 +3,11 @@ bin/
 
 # Base de datos local — cada quien la genera con: python database/init_db.py
 database/chazapp.db
+data/
+/data/
+Spring/data/
+*.mv.db
+*.trace.db
 
 # Archivos de Python compilados
 __pycache__/

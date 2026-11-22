@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${'Panel Vendedor - ' + chaza.nombre + ' | ChazApp'}">Panel Vendedor | ChazApp</title>
+    <!-- Bootstrap 5 CSS & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --unal-green: #006633;
+            --unal-green-dark: #004d26;
+        }
+        .bg-unal {
+            background-color: var(--unal-green) !important;
+            color: #ffffff;
+        }
+        .btn-unal {
+            background-color: var(--unal-green);
+            color: #ffffff;
+            border: none;
+        }
+        .btn-unal:hover {
+            background-color: var(--unal-green-dark);
+            color: #ffffff;
+        }
+        .brand-logo-nav {
+            max-height: 48px;
+            object-fit: contain;
+        }
+        .thumb-img {
+            width: 75px;
+            height: 75px;
+            object-fit: cover;
+            border-radius: 0.5rem;
+        }
+        .thumb-placeholder {
+            width: 75px;
+            height: 75px;
+            background-color: #e9ecef;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #adb5bd;
+        }
+        .card-stat {
+            border-radius: 0.75rem;
+        }
+    </style>
+</head>
+<body class="bg-light d-flex flex-column min-vh-100">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg bg-white border-bottom shadow-sm sticky-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center gap-2" th:href="@{/}">
+                <img th:src="@{/img/unal_logo.png}" alt="Logo UNAL" class="brand-logo-nav">
+                <div>
+                    <span class="fw-bold fs-5 text-success" style="color: var(--unal-green) !important;">ChazApp</span>
+                    <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle ms-1">Panel Vendedor</span>
+                </div>
+            </a>
+            <div class="d-flex align-items-center gap-2">
+                <a th:href="@{'/estudiante/chazas/' + ${chaza.id}}" target="_blank" class="btn btn-outline-success btn-sm">
+                    <i class="bi bi-eye me-1"></i> Vista Estudiante
+                </a>
+                <a th:href="@{/}" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-box-arrow-right me-1"></i> Salir / Cambiar
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="container py-4 flex-grow-1">
+
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb small">
+                <li class="breadcrumb-item"><a th:href="@{/}" class="text-decoration-none text-muted">Inicio</a></li>
+                <li class="breadcrumb-item text-muted">Panel Vendedor</li>
+                <li class="breadcrumb-item active" aria-current="page" th:text="${chaza.nombre}">Chaza</li>
+            </ol>
+        </nav>
+
+        <!-- Flash Success Notification -->
+        <div th:if="${mensajeExito}" class="alert alert-success alert-dismissible fade show shadow-sm border-0 mb-4" role="alert">
+            <div class="d-flex align-items-center">
+                <i class="bi bi-check-circle-fill fs-5 me-2 text-success"></i>
+                <strong th:text="${mensajeExito}">Disponibilidad actualizada exitosamente.</strong>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <!-- Chaza Profile Card -->
+        <div class="card border-0 shadow-sm mb-4 rounded-4">
+            <div class="card-body p-4">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <h2 class="fw-bold text-dark mb-0" th:text="${chaza.nombre}">Nombre de la Chaza</h2>
+                            <span th:if="${chaza.menuPublicado}" class="badge bg-success-subtle text-success border border-success-subtle rounded-pill">
+                                Menú Publicado
+                            </span>
+                            <span th:unless="${chaza.menuPublicado}" class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle rounded-pill">
+                                Menú No Publicado
+                            </span>
+                        </div>
+                        <p class="text-muted small mb-2">
+                            <i class="bi bi-geo-alt-fill text-danger me-1"></i>
+                            <span th:text="${chaza.ubicacion}">Ubicación</span>
+                        </p>
+                        <p class="text-secondary small mb-0" th:text="${chaza.descripcion}">
+                            Descripción de la chaza.
+                        </p>
+                    </div>
+                    <div class="col-md-4 mt-3 mt-md-0">
+                        <div class="d-flex gap-2 justify-content-md-end">
+                            <div class="bg-light p-3 rounded-3 text-center border card-stat">
+                                <span class="d-block text-muted small">Total</span>
+                                <span class="fs-4 fw-bold text-dark" th:text="${productos.size()}">0</span>
+                            </div>
+                            <div class="bg-success-subtle p-3 rounded-3 text-center border border-success-subtle card-stat">
+                                <span class="d-block text-success small fw-semibold">Disponibles</span>
+                                <span class="fs-4 fw-bold text-success" th:text="${productos.?[disponible].size()}">0</span>
+                            </div>
+                            <div class="bg-danger-subtle p-3 rounded-3 text-center border border-danger-subtle card-stat">
+                                <span class="d-block text-danger small fw-semibold">Agotados</span>
+                                <span class="fs-4 fw-bold text-danger" th:text="${productos.?[!disponible].size()}">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section: Actualizar Disponibilidad (CU-04) -->
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+            <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+                <div>
+                    <h4 class="fw-bold text-dark mb-0">
+                        <i class="bi bi-toggles2 text-success me-2"></i> Gestión de Disponibilidad de Productos
+                    </h4>
+                    <small class="text-muted">Presiona el botón para alternar el estado entre Disponible y Agotado inmediatamente.</small>
+                </div>
+            </div>
+            
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col" style="width: 90px;" class="ps-4">Imagen</th>
+                                <th scope="col">Producto y Descripción</th>
+                                <th scope="col">Categoría</th>
+                                <th scope="col">Precio</th>
+                                <th scope="col" class="text-center">Estado Actual</th>
+                                <th scope="col" class="text-end pe-4">Acción (CU-04)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="producto : ${productos}">
+                                <!-- Thumbnail -->
+                                <td class="ps-4">
+                                    <img th:if="${producto.imagenUrl != null}" th:src="@{${producto.imagenUrl}}" th:alt="${producto.nombre}" class="thumb-img shadow-sm">
+                                    <div th:unless="${producto.imagenUrl != null}" class="thumb-placeholder shadow-sm">
+                                        <i class="bi bi-card-image fs-4"></i>
+                                    </div>
+                                </td>
+
+                                <!-- Nombre y Detalle -->
+                                <td>
+                                    <span class="fw-bold text-dark d-block" th:text="${producto.nombre}">Nombre Producto</span>
+                                    <small class="text-secondary" th:text="${producto.descripcion}">Descripción del producto...</small>
+                                </td>
+
+                                <!-- Categoría -->
+                                <td>
+                                    <span th:if="${producto.categoria != null}" class="badge bg-secondary-subtle text-secondary" th:text="${producto.categoria}">Categoría</span>
+                                    <span th:unless="${producto.categoria != null}" class="text-muted small">—</span>
+                                </td>
+
+                                <!-- Precio -->
+                                <td>
+                                    <span class="fw-semibold text-dark" th:text="'$ ' + ${#numbers.formatDecimal(producto.precio, 0, 'POINT', 0, 'POINT')}">$ 10.000</span>
+                                </td>
+
+                                <!-- Estado Actual -->
+                                <td class="text-center">
+                                    <span th:if="${producto.disponible}" class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 rounded-pill fs-7">
+                                        <i class="bi bi-check-circle-fill me-1"></i> Disponible
+                                    </span>
+                                    <span th:unless="${producto.disponible}" class="badge bg-danger-subtle text-danger border border-danger-subtle px-3 py-2 rounded-pill fs-7">
+                                        <i class="bi bi-x-circle-fill me-1"></i> Agotado
+                                    </span>
+                                </td>
+
+                                <!-- Acción Toggle (POST /vendedor/producto/{id}/toggle) -->
+                                <td class="text-end pe-4">
+                                    <form th:action="@{'/vendedor/producto/' + ${producto.id} + '/toggle'}" method="post" class="d-inline">
+                                        <button th:if="${producto.disponible}" type="submit" class="btn btn-outline-danger btn-sm px-3 fw-semibold shadow-sm" title="Marcar como Agotado">
+                                            <i class="bi bi-x-circle me-1"></i> Marcar Agotado
+                                        </button>
+                                        <button th:unless="${producto.disponible}" type="submit" class="btn btn-success btn-sm px-3 fw-semibold shadow-sm" title="Marcar como Disponible">
+                                            <i class="bi bi-check-circle me-1"></i> Marcar Disponible
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <tr th:if="${productos.empty}">
+                                <td colspan="6" class="text-center py-4 text-muted">
+                                    No hay productos registrados en esta chaza.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-top py-3 mt-auto">
+        <div class="container text-center text-muted small">
+            <span>ChazApp • Universidad Nacional de Colombia • Ingeniería de Software I</span>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

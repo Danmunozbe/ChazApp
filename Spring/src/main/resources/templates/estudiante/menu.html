@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${chaza.nombre + ' - Menú | ChazApp'}">Menú | ChazApp</title>
+    <!-- Bootstrap 5 CSS & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --unal-green: #006633;
+            --unal-green-dark: #004d26;
+        }
+        .btn-unal {
+            background-color: var(--unal-green);
+            color: #ffffff;
+            border: none;
+        }
+        .btn-unal:hover {
+            background-color: var(--unal-green-dark);
+            color: #ffffff;
+        }
+        .chaza-header-banner {
+            height: 220px;
+            object-fit: cover;
+            width: 100%;
+            border-radius: 1rem;
+        }
+        .product-card {
+            border-radius: 0.85rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .product-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 18px rgba(0,0,0,0.08) !important;
+        }
+        .product-card.agotado {
+            opacity: 0.85;
+            background-color: #fafafa;
+            border-color: #f1f1f1 !important;
+        }
+        .product-img {
+            height: 160px;
+            object-fit: cover;
+            width: 100%;
+            border-top-left-radius: 0.85rem;
+            border-top-right-radius: 0.85rem;
+        }
+        .product-img-placeholder {
+            height: 160px;
+            background-color: #f1f3f5;
+            border-top-left-radius: 0.85rem;
+            border-top-right-radius: 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #adb5bd;
+        }
+        .brand-logo-nav {
+            max-height: 48px;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body class="bg-light d-flex flex-column min-vh-100">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg bg-white border-bottom shadow-sm sticky-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center gap-2" th:href="@{/}">
+                <img th:src="@{/img/unal_logo.png}" alt="Logo UNAL" class="brand-logo-nav">
+                <div>
+                    <span class="fw-bold fs-5 text-success" style="color: var(--unal-green) !important;">ChazApp</span>
+                    <span class="badge bg-secondary-subtle text-secondary ms-1">Estudiante</span>
+                </div>
+            </a>
+            <div class="d-flex align-items-center gap-2">
+                <a th:href="@{/estudiante/chazas}" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-arrow-left me-1"></i> Volver a Chazas
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="container py-4 flex-grow-1">
+
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb small">
+                <li class="breadcrumb-item"><a th:href="@{/}" class="text-decoration-none text-muted">Inicio</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/estudiante/chazas}" class="text-decoration-none text-muted">Chazas</a></li>
+                <li class="breadcrumb-item active" aria-current="page" th:text="${chaza.nombre}">Menú</li>
+            </ol>
+        </nav>
+
+        <!-- Chaza Header Card -->
+        <div class="card border-0 shadow-sm mb-4 overflow-hidden rounded-4">
+            <div th:if="${chaza.imagenUrl != null}">
+                <img th:src="@{${chaza.imagenUrl}}" th:alt="${chaza.nombre}" class="chaza-header-banner">
+            </div>
+            <div class="card-body p-4">
+                <div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-2">
+                    <div>
+                        <h2 class="fw-bold text-dark mb-1" th:text="${chaza.nombre}">Nombre de la Chaza</h2>
+                        <div class="text-muted d-flex align-items-center">
+                            <i class="bi bi-geo-alt-fill text-danger me-1"></i>
+                            <span th:text="${chaza.ubicacion}">Ubicación en el campus</span>
+                        </div>
+                    </div>
+                    <div>
+                        <span th:if="${menuPublicado}" class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 rounded-pill fs-7">
+                            <i class="bi bi-check-circle-fill me-1"></i> Menú Disponible
+                        </span>
+                        <span th:unless="${menuPublicado}" class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle px-3 py-2 rounded-pill fs-7">
+                            <i class="bi bi-exclamation-circle-fill me-1"></i> Menú No Publicado
+                        </span>
+                    </div>
+                </div>
+                <p class="text-secondary mb-0" th:text="${chaza.descripcion}">Descripción de la chaza.</p>
+            </div>
+        </div>
+
+        <!-- CASO EXCEPCIÓN: Menú NO Publicado -->
+        <div th:unless="${menuPublicado}" class="card border-0 shadow-sm text-center p-5 rounded-4">
+            <div class="card-body py-4">
+                <div class="rounded-circle bg-warning-subtle text-warning-emphasis d-inline-flex p-4 mb-3">
+                    <i class="bi bi-journal-x" style="font-size: 3.5rem;"></i>
+                </div>
+                <h3 class="fw-bold text-dark mb-2">No hay un menú disponible para esta chaza</h3>
+                <p class="lead text-muted mx-auto mb-4" style="max-width: 580px;">
+                    El encargado de este puesto aún no ha publicado el menú para el día de hoy o se encuentra fuera de servicio.
+                </p>
+                <div class="d-flex justify-content-center gap-2">
+                    <a th:href="@{/estudiante/chazas}" class="btn btn-unal px-4 py-2 fw-semibold">
+                        <i class="bi bi-arrow-left me-2"></i> Ver otras chazas disponibles
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- CASO ÉXITO: Menú Publicado con Productos y Disponibilidad -->
+        <div th:if="${menuPublicado}">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="fw-bold text-dark mb-0">
+                    <i class="bi bi-menu-button-wide text-success me-2"></i> Menú del Día
+                </h4>
+                <small class="text-muted" th:text="${productos.size() + ' productos en total'}">X productos</small>
+            </div>
+
+            <!-- Grid de Productos -->
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-4" th:each="producto : ${productos}">
+                    <div class="card h-100 border-0 shadow-sm product-card d-flex flex-column"
+                         th:classappend="${!producto.disponible} ? 'agotado' : ''">
+                        
+                        <!-- Imagen de producto o placeholder -->
+                        <div class="position-relative">
+                            <img th:if="${producto.imagenUrl != null}" th:src="@{${producto.imagenUrl}}" th:alt="${producto.nombre}" class="product-img">
+                            <div th:unless="${producto.imagenUrl != null}" class="product-img-placeholder">
+                                <i class="bi bi-card-image fs-1"></i>
+                            </div>
+                            
+                            <!-- Indicador visual Disponible / Agotado -->
+                            <div class="position-absolute top-0 end-0 m-2">
+                                <span th:if="${producto.disponible}" class="badge bg-success shadow-sm px-2 py-1 fs-7">
+                                    <i class="bi bi-check-circle-fill me-1"></i> Disponible
+                                </span>
+                                <span th:unless="${producto.disponible}" class="badge bg-danger shadow-sm px-2 py-1 fs-7">
+                                    <i class="bi bi-x-circle-fill me-1"></i> Agotado
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Info Producto -->
+                        <div class="card-body d-flex flex-column p-3">
+                            <div class="d-flex justify-content-between align-items-start gap-2 mb-1">
+                                <h5 class="card-title fw-bold text-dark mb-0" th:text="${producto.nombre}">Nombre Producto</h5>
+                                <span th:if="${producto.categoria != null}" class="badge bg-secondary-subtle text-secondary small" th:text="${producto.categoria}">Categoría</span>
+                            </div>
+
+                            <p class="card-text text-secondary small flex-grow-1 mb-3" th:text="${producto.descripcion}">
+                                Descripción del producto.
+                            </p>
+
+                            <!-- Precio y Estado -->
+                            <div class="d-flex justify-content-between align-items-center pt-2 border-top mt-auto">
+                                <div>
+                                    <span class="text-muted small d-block">Precio</span>
+                                    <span class="fs-5 fw-bold text-dark" th:text="'$ ' + ${#numbers.formatDecimal(producto.precio, 0, 'POINT', 0, 'POINT')} + ' COP'">$ 10.000 COP</span>
+                                </div>
+                                <div>
+                                    <span th:if="${producto.disponible}" class="text-success small fw-semibold">
+                                        <i class="bi bi-dot fs-4 align-middle"></i> Listo para ordenar
+                                    </span>
+                                    <span th:unless="${producto.disponible}" class="text-danger small fw-semibold">
+                                        <i class="bi bi-dot fs-4 align-middle"></i> No disponible
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-top py-3 mt-auto">
+        <div class="container text-center text-muted small">
+            <span>ChazApp • Universidad Nacional de Colombia • Ingeniería de Software I</span>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
