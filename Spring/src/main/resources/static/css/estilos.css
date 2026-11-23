@@ -1,0 +1,329 @@
+/* ============================================================
+   ChazApp - estilo de escritorio sencillo (Windows 10 / Ubuntu)
+   Ventanas con barra de título, botones planos, barra de estado.
+   ============================================================ */
+
+:root {
+    --fondo: #ececec;
+    --ventana: #ffffff;
+    --barra: #f3f3f3;
+    --borde: #c9c9c9;
+    --borde-suave: #e2e2e2;
+    --texto: #1f1f1f;
+    --texto-sec: #5c5c5c;
+    --acento: #a6192e;          /* rojo del escudo UNAL */
+    --acento-hover: #8a1426;
+    --foco: #0078d7;
+    --ok-fondo: #e6f4ea;   --ok-texto: #1e6b34;
+    --agotado-fondo: #eeeeee; --agotado-texto: #6b6b6b;
+    --info-fondo: #e5f1fb; --info-texto: #0b5394;
+    --aviso-fondo: #fff4ce; --aviso-borde: #d8b100;
+    --error-fondo: #fde7e9; --error-borde: #c42b1c;
+    --exito-fondo: #dff6dd; --exito-borde: #107c10;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", Ubuntu, Cantarell, "Noto Sans", "Helvetica Neue", Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--texto);
+    background: var(--fondo);
+}
+
+a { color: var(--foco); }
+
+/* ---------- Barra superior ---------- */
+.barra-titulo {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 6px 20px;
+    background: var(--ventana);
+    border-bottom: 1px solid var(--borde);
+}
+.marca { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--texto); }
+.marca img { height: 40px; width: auto; }
+.marca-nombre { font-size: 18px; font-weight: 600; }
+.marca-sub { color: var(--texto-sec); font-size: 13px; border-left: 1px solid var(--borde); padding-left: 16px; }
+
+/* Selector de modo (comprador / vendedor) en la barra */
+.modos { margin-left: auto; display: flex; gap: 2px; }
+.modo {
+    font: inherit;
+    padding: 5px 14px;
+    background: #e1e1e1;
+    border: 1px solid #adadad;
+    cursor: pointer;
+    color: var(--texto);
+}
+.modo:first-child { border-radius: 3px 0 0 3px; }
+.modo:last-child { border-radius: 0 3px 3px 0; border-left: none; }
+.modo:hover { background: #e5f1fb; }
+.modo.activo { background: var(--acento); border-color: var(--acento); color: #fff; }
+
+/* ---------- Contenido ---------- */
+.contenido { max-width: 1180px; margin: 0 auto; padding: 18px 20px 28px; }
+.contenido.estrecho { max-width: 760px; }
+.contenido.con-barra-estado { padding-bottom: 56px; }
+
+.titulo-pagina { font-size: 22px; font-weight: 600; margin: 0 0 4px; }
+.subtitulo { margin: 0 0 16px; color: var(--texto-sec); }
+.texto-sec { color: var(--texto-sec); margin: 0 0 8px; }
+.ruta { margin-bottom: 12px; color: var(--texto-sec); font-size: 13px; }
+
+.dato { margin: 2px 0; font-size: 13px; }
+.dato-etiqueta { color: var(--texto-sec); }
+
+/* ---------- Ventanas ---------- */
+.ventana {
+    background: var(--ventana);
+    border: 1px solid var(--borde);
+    border-radius: 4px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .06);
+}
+.ventana-titulo {
+    padding: 7px 12px;
+    background: var(--barra);
+    border-bottom: 1px solid var(--borde);
+    border-radius: 4px 4px 0 0;
+    font-weight: 600;
+    font-size: 13px;
+}
+.ventana-cuerpo { padding: 12px 14px; }
+
+/* ---------- Botones y campos ---------- */
+.boton {
+    display: inline-block;
+    font: inherit;
+    padding: 5px 16px;
+    color: #000;
+    background: #e1e1e1;
+    border: 1px solid #adadad;
+    border-radius: 3px;
+    text-decoration: none;
+    cursor: pointer;
+    white-space: nowrap;
+}
+.boton:hover { background: #e5f1fb; border-color: var(--foco); }
+.boton:focus-visible, .campo:focus-visible, .pestana:focus-visible { outline: 2px solid var(--foco); outline-offset: 1px; }
+.boton-primario { color: #fff; background: var(--acento); border-color: var(--acento); }
+.boton-primario:hover { background: var(--acento-hover); border-color: var(--acento-hover); }
+.boton:disabled, .boton:disabled:hover {
+    color: #a0a0a0; background: #f4f4f4; border-color: #d6d6d6; cursor: not-allowed;
+}
+.boton.ancho { display: block; width: 100%; margin-top: 10px; padding: 7px 16px; }
+.boton.mini { padding: 0 8px; min-width: 26px; }
+
+.etiqueta { display: block; margin: 12px 0 4px; font-size: 13px; }
+.campo {
+    width: 100%;
+    font: inherit;
+    padding: 5px 8px;
+    border: 1px solid #8a8a8a;
+    border-radius: 2px;
+    background: #fff;
+}
+
+.acciones { display: flex; gap: 8px; justify-content: flex-end; margin-top: 12px; }
+
+/* ---------- Etiquetas de estado ---------- */
+.estado {
+    display: inline-block;
+    padding: 1px 8px;
+    border-radius: 2px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+.estado-ok { background: var(--ok-fondo); color: var(--ok-texto); }
+.estado-agotado { background: var(--agotado-fondo); color: var(--agotado-texto); border: 1px solid #cfcfcf; }
+.estado-info { background: var(--info-fondo); color: var(--info-texto); }
+
+/* ---------- Mensajes ---------- */
+.mensaje { padding: 8px 10px; margin: 10px 0; border-left: 4px solid; font-size: 13px; }
+.mensaje.aviso { background: var(--aviso-fondo); border-color: var(--aviso-borde); }
+.mensaje.error { background: var(--error-fondo); border-color: var(--error-borde); }
+.mensaje.exito { background: var(--exito-fondo); border-color: var(--exito-borde); }
+
+/* ---------- Listado de chazas ---------- */
+.grilla-chazas { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+.tarjeta-chaza { display: flex; flex-direction: column; overflow: hidden; }
+.tarjeta-chaza .ventana-cuerpo { display: flex; flex-direction: column; flex: 1; }
+.tarjeta-chaza .acciones { margin-top: auto; padding-top: 10px; }
+.banner { display: block; width: 100%; height: 150px; object-fit: cover; border-bottom: 1px solid var(--borde); }
+.tarjeta-titulo { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 16px; margin: 0 0 6px; }
+
+/* ---------- Menú ---------- */
+.cabecera-chaza { display: flex; gap: 16px; align-items: center; padding: 10px; margin-bottom: 16px; }
+.banner-chico { width: 180px; height: 96px; object-fit: cover; border: 1px solid var(--borde-suave); border-radius: 2px; }
+
+.dos-columnas { display: grid; grid-template-columns: 1fr 340px; gap: 16px; align-items: start; }
+
+.pestanas { display: flex; gap: 2px; padding: 8px 10px 0; border-bottom: 1px solid var(--borde); background: var(--ventana); }
+.pestana {
+    font: inherit;
+    padding: 5px 14px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-bottom: none;
+    border-radius: 3px 3px 0 0;
+    margin-bottom: -1px;
+    cursor: pointer;
+    color: var(--texto-sec);
+}
+.pestana:hover { background: #f0f0f0; }
+.pestana.activa { background: var(--ventana); border-color: var(--borde); color: var(--texto); font-weight: 600; }
+
+.lista-productos { list-style: none; margin: 0; padding: 0; }
+.producto {
+    display: grid;
+    grid-template-columns: 1fr auto auto 120px;
+    gap: 12px;
+    align-items: center;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--borde-suave);
+    transition: background-color .3s;
+}
+.producto:last-child { border-bottom: none; }
+.producto-nombre { font-weight: 600; }
+.producto-descripcion { font-size: 12.5px; color: var(--texto-sec); }
+.producto-precio { font-weight: 600; white-space: nowrap; }
+.producto .agregar { width: 100%; }
+
+/* Productos agotados: se distinguen a simple vista (CU-05-M01) */
+.producto.agotado { background: #f7f7f7; }
+.producto.agotado .producto-nombre,
+.producto.agotado .producto-descripcion,
+.producto.agotado .producto-precio { color: #9a9a9a; }
+.producto.agotado .producto-precio { text-decoration: line-through; }
+
+/* Resalta un producto cuyo estado acaba de cambiar */
+.producto.cambio { background: var(--aviso-fondo); }
+
+/* ---------- Carrito ---------- */
+.carrito { position: sticky; top: 12px; }
+.carrito-items { list-style: none; margin: 0; padding: 0; }
+.carrito-item { padding: 8px 0; border-bottom: 1px solid var(--borde-suave); }
+.carrito-item.agotado .carrito-nombre { color: var(--error-borde); }
+.carrito-fila { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.carrito-nombre { font-weight: 600; }
+.carrito-controles { display: flex; align-items: center; gap: 4px; margin-top: 4px; }
+.carrito-cantidad { min-width: 24px; text-align: center; }
+.carrito-total { display: flex; justify-content: space-between; padding: 10px 0 2px; font-size: 15px; }
+.nota { font-size: 12px; color: var(--texto-sec); margin: 8px 0 0; }
+
+/* ---------- Detalle del pedido ---------- */
+.datos { display: grid; grid-template-columns: 140px 1fr; gap: 4px 12px; margin: 12px 0; }
+.datos dt { color: var(--texto-sec); }
+.datos dd { margin: 0; }
+.tabla { width: 100%; border-collapse: collapse; margin-top: 8px; }
+.tabla th, .tabla td { padding: 6px 8px; border-bottom: 1px solid var(--borde-suave); text-align: left; }
+.tabla thead th { background: var(--barra); border-bottom: 1px solid var(--borde); font-weight: 600; font-size: 13px; }
+.tabla tfoot th { border-top: 1px solid var(--borde); border-bottom: none; }
+.tabla .num { text-align: right; }
+
+/* ---------- Barra de estado ---------- */
+.barra-estado {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 20px;
+    font-size: 12px;
+    color: var(--texto-sec);
+    background: var(--barra);
+    border-top: 1px solid var(--borde);
+}
+.barra-estado.error { color: var(--error-borde); }
+
+/* ---------- Pantallas angostas ---------- */
+@media (max-width: 860px) {
+    .dos-columnas { grid-template-columns: 1fr; }
+    .carrito { position: static; }
+    .producto { grid-template-columns: 1fr auto; }
+    .marca-sub { display: none; }
+    .cabecera-chaza { flex-direction: column; align-items: flex-start; }
+}
+
+/* ============================================================
+   Añadidos: pantalla de inicio, carrito multi-chaza, panel vendedor
+   ============================================================ */
+
+/* ---------- Pantalla de inicio (elegir modo) ---------- */
+.bienvenida { text-align: center; padding-top: 24px; }
+.tarjetas-modo { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
+.tarjeta-modo {
+    width: 320px;
+    padding: 24px 20px;
+    text-align: center;
+    cursor: pointer;
+    font: inherit;
+    color: var(--texto);
+}
+.tarjeta-modo:hover { border-color: var(--foco); box-shadow: 0 2px 8px rgba(0,0,0,.12); }
+.tarjeta-modo-icono { font-size: 44px; }
+.tarjeta-modo-titulo { font-size: 18px; font-weight: 600; margin: 8px 0; }
+
+/* ---------- Comprador: bloques de chaza ---------- */
+.chazas-lista { display: flex; flex-direction: column; gap: 16px; }
+.chaza-bloque { overflow: hidden; }
+.chaza-encabezado { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.chaza-ubicacion { font-weight: 400; font-size: 12px; color: var(--texto-sec); }
+.banner-chico { display: block; width: 100%; height: 120px; object-fit: cover; border-bottom: 1px solid var(--borde); }
+.categoria-nombre {
+    padding: 8px 14px 2px;
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--texto-sec);
+    text-transform: uppercase;
+    letter-spacing: .3px;
+}
+
+/* ---------- Carrito multi-chaza ---------- */
+.carrito-grupo { margin-bottom: 10px; }
+.carrito-grupo-titulo {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--acento);
+    border-bottom: 1px solid var(--borde-suave);
+    padding-bottom: 3px;
+    margin-bottom: 4px;
+}
+
+/* ---------- Confirmación inline ---------- */
+.confirmacion { margin-top: 12px; }
+.confirmacion-pedido {
+    border: 1px solid var(--borde-suave);
+    border-radius: 3px;
+    padding: 8px 10px;
+    margin-top: 8px;
+}
+.confirmacion-titulo { font-weight: 600; margin-bottom: 4px; }
+.confirmacion-items { list-style: none; margin: 0 0 4px; padding: 0; font-size: 13px; color: var(--texto-sec); }
+.confirmacion-total { font-weight: 600; }
+
+/* ---------- Vendedor ---------- */
+.campo-select { max-width: 360px; }
+.dos-columnas.vendedor { margin-top: 16px; }
+.sub-seccion { font-size: 14px; font-weight: 600; margin: 10px 0 6px; }
+
+.cola { list-style: none; margin: 0 0 8px; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.pedido-cola {
+    border: 1px solid var(--borde-suave);
+    border-radius: 3px;
+    padding: 8px 10px;
+    background: #fafafa;
+}
+.cola.listos .pedido-cola { background: var(--ok-fondo); }
+.pedido-cab { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.pedido-titulo { font-weight: 600; }
+.pedido-hora { font-size: 12px; color: var(--texto-sec); margin: 2px 0; }
+.pedido-items { list-style: none; margin: 4px 0; padding: 0; font-size: 13px; }
+.pedido-total { font-size: 13px; font-weight: 600; }
+.pedido-cola .acciones { margin-top: 6px; }
+
+/* El inventario del vendedor usa dos columnas (info + acción) */
+#inventario-vendedor .producto { grid-template-columns: 1fr auto auto; }
