@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos :: cabeza('ChazApp · Universidad Nacional de Colombia')}"></head>
+<body th:data-intervalo="${intervaloRefresco}">
+
+<!-- Barra de título estilo escritorio -->
+<header class="barra-titulo">
+    <div class="marca">
+        <img th:src="@{/img/unal_logo.png}" alt="Escudo de la Universidad Nacional de Colombia">
+        <span class="marca-nombre">ChazApp</span>
+    </div>
+    <span class="marca-sub">Pedidos en las chazas · Universidad Nacional de Colombia</span>
+
+    <!-- Selector de modo: comprador / vendedor -->
+    <nav class="modos" id="selector-modo" hidden>
+        <button type="button" class="modo activo" data-modo="comprador">Modo comprador</button>
+        <button type="button" class="modo" data-modo="vendedor">Modo vendedor</button>
+    </nav>
+</header>
+
+<main class="contenido con-barra-estado">
+
+    <!-- ============ Pantalla inicial: elegir modo ============ -->
+    <section id="pantalla-inicio" class="bienvenida">
+        <h1 class="titulo-pagina">¿Cómo quieres entrar?</h1>
+        <p class="subtitulo">Elige tu rol para usar ChazApp.</p>
+        <div class="tarjetas-modo">
+            <button type="button" class="ventana tarjeta-modo" data-modo="comprador">
+                <div class="tarjeta-modo-icono">🛒</div>
+                <div class="tarjeta-modo-titulo">Modo comprador</div>
+                <div class="texto-sec">Explora las chazas, arma tu carrito con productos de varias
+                    chazas y haz tu pedido anticipado.</div>
+            </button>
+            <button type="button" class="ventana tarjeta-modo" data-modo="vendedor">
+                <div class="tarjeta-modo-icono">🏪</div>
+                <div class="tarjeta-modo-titulo">Modo vendedor</div>
+                <div class="texto-sec">Administra tu chaza: marca productos como agotados y gestiona
+                    la cola de pedidos que llegan.</div>
+            </button>
+        </div>
+    </section>
+
+    <!-- ============ MODO COMPRADOR ============ -->
+    <section id="pantalla-comprador" class="dos-columnas" hidden>
+        <div>
+            <h1 class="titulo-pagina">¿Qué se te antoja?</h1>
+            <p class="subtitulo">Agrega productos de las chazas que quieras; tu carrito los agrupa y
+                hace un pedido por cada chaza.</p>
+            <div id="chazas-comprador" class="chazas-lista" aria-live="polite"></div>
+        </div>
+
+        <!-- Carrito global (mezcla chazas) -->
+        <aside class="ventana carrito">
+            <div class="ventana-titulo">Tu carrito</div>
+            <div class="ventana-cuerpo">
+                <p id="carrito-vacio" class="texto-sec">Aún no has agregado productos.</p>
+                <div id="carrito-grupos"></div>
+
+                <div class="carrito-total"><span>Total</span><strong id="carrito-total">$ 0</strong></div>
+                <div id="mensaje-carrito" class="mensaje" role="alert" hidden></div>
+
+                <label for="nombre-estudiante" class="etiqueta">Tu nombre</label>
+                <input id="nombre-estudiante" type="text" class="campo" maxlength="80" autocomplete="name"
+                       placeholder="Con este nombre reclamas el pedido">
+
+                <button id="confirmar-compra" type="button" class="boton boton-primario ancho" disabled>
+                    Confirmar pedido</button>
+                <p class="nota">Al confirmar, cada chaza recibe su pedido en su cola.</p>
+
+                <!-- Confirmación inline (sin página aparte) -->
+                <div id="compra-confirmada" class="confirmacion" hidden></div>
+            </div>
+        </aside>
+    </section>
+
+    <!-- ============ MODO VENDEDOR ============ -->
+    <section id="pantalla-vendedor" hidden>
+        <h1 class="titulo-pagina">Administración de la chaza</h1>
+        <label for="selector-chaza" class="etiqueta">Chaza que administras</label>
+        <select id="selector-chaza" class="campo campo-select"></select>
+
+        <div class="dos-columnas vendedor">
+            <!-- CU-04: inventario / disponibilidad -->
+            <section class="ventana">
+                <div class="ventana-titulo">Inventario · disponibilidad</div>
+                <div class="ventana-cuerpo">
+                    <p class="texto-sec">Marca un producto como agotado para que no se pueda pedir.
+                        El cambio se refleja solo en el menú del comprador.</p>
+                    <div id="mensaje-vendedor" class="mensaje" role="alert" hidden></div>
+                    <div id="inventario-vendedor"></div>
+                </div>
+            </section>
+
+            <!-- CU-02: cola de pedidos -->
+            <section class="ventana">
+                <div class="ventana-titulo">Cola de pedidos</div>
+                <div class="ventana-cuerpo">
+                    <h2 class="sub-seccion">Pendientes</h2>
+                    <p id="cola-vacia" class="texto-sec">No hay pedidos pendientes.</p>
+                    <ol id="cola-pendientes" class="cola"></ol>
+
+                    <h2 class="sub-seccion">Listos para recoger</h2>
+                    <p id="listos-vacio" class="texto-sec">Todavía no hay pedidos listos.</p>
+                    <ul id="cola-listos" class="cola listos"></ul>
+                </div>
+            </section>
+        </div>
+    </section>
+</main>
+
+<footer class="barra-estado">
+    <span id="estado-refresco">ChazApp</span>
+    <span id="estado-intervalo"></span>
+</footer>
+
+<script th:src="@{/js/app.js}"></script>
+</body>
+</html>
