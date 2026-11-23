@@ -12,24 +12,22 @@ ChazApp busca facilitar la consulta de menús y la gestión de pedidos en las ch
 
 Actualmente, el repositorio contiene dos versiones:
 
-- **Aplicación web (en desarrollo):** nueva versión construida con Spring Boot, Java y Thymeleaf.
+- **Aplicación web:** versión principal construida con Spring Boot, Java, Thymeleaf, HTML, CSS y JavaScript.
 - **Prototipo de escritorio:** versión anterior desarrollada en Java Swing, conservada en `oldFiles/` como referencia del desarrollo inicial.
 
 ---
 
 ## 🚀 Funcionalidades
 
-La aplicación está planteada para permitir:
+La aplicación web permite:
 
 - Consultar las chazas disponibles en el campus.
-- Visualizar los menús y productos disponibles.
-- Consultar la disponibilidad y los precios de los productos.
-- Realizar pedidos con cantidades específicas.
+- Visualizar los menús y productos organizados por categorías.
+- Consultar la disponibilidad en tiempo real y los precios de los productos.
+- Realizar pedidos con cantidades específicas desde la interfaz web.
 - Generar un PIN para identificar y reclamar los pedidos.
-- Gestionar los pedidos desde el perfil del vendedor.
-- Actualizar el estado de los pedidos.
-
-*Estas funcionalidades se irán implementando progresivamente en la nueva aplicación web.*
+- Gestionar la cola de pedidos desde el perfil del vendedor.
+- Actualizar el estado de los pedidos y la disponibilidad de los productos.
 
 ---
 
@@ -37,24 +35,36 @@ La aplicación está planteada para permitir:
 
 ```text
 ChazApp/
-├── .devcontainer/          # Configuración de GitHub Codespaces
+├── .devcontainer/                  # Configuración de GitHub Codespaces
 │
-├── oldFiles/               # Prototipo anterior de escritorio
+├── oldFiles/                       # Prototipo anterior de escritorio
 │
-├── Spring/                 # Nueva aplicación web
+├── Spring/                         # Nueva aplicación web
 │   ├── data/
-│   │   ├── chazapp.mv.db   # Base de datos H2
+│   │   └── chazapp.mv.db           # Base de datos H2
+│   ├── doc-build/                  # Documentación técnica en HTML
 │   ├── src/
 │   │   ├── main/
-│   │   │   ├── java/        # Código fuente Java
+│   │   │   ├── java/com/ChazApp/ChazApp/
+│   │   │   │   ├── negocio/        # Servicios, DTOs y excepciones
+│   │   │   │   ├── persistencia/   # Entidades, repositorios y carga inicial
+│   │   │   │   └── presentacion/   # Controladores web y API REST
 │   │   │   └── resources/
-│   │   │       ├── static/  # CSS, JavaScript e imágenes
-│   │   │       └── templates/ # Plantillas HTML con Thymeleaf
-│   │   └── test/            # Pruebas automatizadas
-│   ├── pom.xml              # Dependencias y configuración Maven
-│   ├── mvnw                 # Maven Wrapper para Linux / macOS
-│   └── mvnw.cmd             # Maven Wrapper para Windows
+│   │   │       ├── db/             # Scripts SQL de datos iniciales
+│   │   │       ├── static/         # CSS, JavaScript e imágenes
+│   │   │       │   ├── css/        # Hojas de estilo (estilos.css)
+│   │   │       │   ├── img/        # Logos, banners y fotos de productos
+│   │   │       │   └── js/         # Lógica del cliente (app.js)
+│   │   │       ├── templates/      # Plantillas HTML con Thymeleaf
+│   │   │       │   ├── app.html
+│   │   │       │   └── fragmentos.html
+│   │   │       └── application.properties
+│   │   └── test/                   # Pruebas automatizadas
+│   ├── pom.xml                     # Dependencias y configuración Maven
+│   ├── mvnw                        # Maven Wrapper para Linux / macOS
+│   └── mvnw.cmd                    # Maven Wrapper para Windows
 │
+├── ChazApp-Documentacion.pdf       # Documentación del proyecto
 ├── .gitignore
 └── README.md
 ```
@@ -70,13 +80,15 @@ ChazApp/
 | Java 21 | Lenguaje de programación |
 | Spring Boot | Framework principal |
 | Maven | Gestión de dependencias y construcción |
-| Spring MVC | Manejo de solicitudes web |
+| Spring MVC | Manejo de solicitudes web y endpoints REST |
 | Thymeleaf | Renderizado de vistas HTML |
+| HTML5 / CSS3 | Estructura y estilos de la interfaz web |
+| JavaScript | Interactividad en el cliente y consumo de la API |
 | Spring Data JPA | Persistencia y acceso a datos |
 | Hibernate | Mapeo objeto-relacional |
 | H2 | Base de datos durante el desarrollo |
 
-
+---
 
 ## 💻 Requisitos
 
@@ -89,7 +101,7 @@ Para ejecutar la aplicación web:
 
 ## ▶️ Cómo ejecutar la aplicación web
 
-La versión actual en desarrollo se encuentra dentro de la carpeta `Spring/`.
+La versión actual se encuentra dentro de la carpeta `Spring/`.
 
 ### Windows 🪟
 
@@ -124,23 +136,19 @@ Una vez iniciada, acceder desde el navegador a:
 
 **http://localhost:8080/**
 
-> La aplicación web se encuentra en desarrollo. Algunas rutas y funcionalidades todavía están pendientes de implementación.
-
 ### Consola de base de datos H2
 
-Durante el desarrollo se utiliza H2 como base de datos.
+Durante el desarrollo se utiliza H2 como base de datos, precargada con datos iniciales desde `Spring/src/main/resources/db/datos-iniciales.sql`.
 
 La consola está disponible en:
 
 **http://localhost:8080/h2-console**
 
-Los datos de conexión se encuentran en `Spring/src/main/resources/application.properties` y, los datos en `Spring/data`.
+Los datos de conexión se encuentran en `Spring/src/main/resources/application.properties` y los archivos de datos en `Spring/data`.
 
 ---
 
-
-
-## Equipo de desarrollo
+## 👥 Equipo de desarrollo
 
 | Usuario | Responsabilidad |
 |---|---|
